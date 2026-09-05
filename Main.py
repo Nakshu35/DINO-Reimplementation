@@ -53,6 +53,10 @@ def main():
 
     Student = MultiCropWrapper(ViTBackbone =StudentBackbone, DINOHead= StudentHead)
     Teacher = MultiCropWrapper(ViTBackbone= TeacherBackbone, DINOHead= TeacherHead)
+    if torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs")
+        Student = nn.DataParallel(Student)
+        Teacher = nn.DataParallel(Teacher)
     Student.to(Device)
     Teacher.to(Device)
     Teacher.load_state_dict(Student.state_dict())
