@@ -84,19 +84,22 @@ class DINOAugementation(object):
           Normalize = transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
 
           self.GlobalTransform1 = transforms.Compose([
-              transforms.RandomResizedCrop(224, scale=GlobalScale), 
+              transforms.RandomResizedCrop(224, scale=GlobalScale),
+              transforms.Lambda(lambda image: image.convert("RGB")),
               transforms.ToTensor(),
               Normalize
           ])
           self.GlobalTransform2 = transforms.Compose([
-              transforms.RandomResizedCrop(224, scale=GlobalScale), 
+              transforms.RandomResizedCrop(224, scale=GlobalScale),
+              transforms.Lambda(lambda image: image.convert("RGB")),
               transforms.ToTensor(),
               Normalize
           ])
 
           self.NoLocalCrops = NoLocalCrops
           self.LocalTransform = transforms.Compose([
-              transforms.RandomResizedCrop(96, LocalScale), 
+              transforms.RandomResizedCrop(96, LocalScale),
+              transforms.Lambda(lambda image: image.convert("RGB")),
               transforms.ToTensor(),
               Normalize
           ])
