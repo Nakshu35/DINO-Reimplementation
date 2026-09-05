@@ -30,7 +30,7 @@ def main():
 
     TrainAugmentation = DINOAugementation(GlobalScale=(0.4, 1.0), LocalScale=(0.05, 0.4), NoLocalCrops=6)
     ValidationAugmentation = transforms.Compose([
-            transforms.Resize(Config["ImageSize"]),
+            transforms.Resize((Config["ImageSize"], Config["ImageSize"])),
             transforms.ToTensor(),
             transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
         ])
@@ -69,7 +69,7 @@ def main():
         if epoch == 1:
             Student.DINOHead.LastLayer.weight_g.requires_grad = True
         TrainLoss = Train(Student, Teacher, Loss, Optimizer, Device, TrainSet, Config)
-        ValidationLoss = Validate(Student= Student, Teacher= Teacher, ValidationSet= ValidationSet, Loss= Loss)
+        ValidationLoss = Validate(Student= Student, Teacher= Teacher, ValidationSet= ValidationSet, Loss= Loss, Device=Device)
 
         print(f"Epoch {epoch} TrainLoss = {TrainLoss:.4f} ValLoss = {ValidationLoss:.4f}")
 
