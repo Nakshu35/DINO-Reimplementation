@@ -35,4 +35,4 @@ def Train(Student, Teacher, Loss, Optimizer, Device, TrainSet, Config):
 
     AvgLoss = TotalLoss / len(TrainSet.dataset)
 
-    return AvgLoss
+    return AvgLoss, Optimizer.param_groups[0]["lr"]
