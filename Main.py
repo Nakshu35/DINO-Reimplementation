@@ -10,6 +10,8 @@ from MultiCropWrapper import MultiCropWrapper
 from ViT.ViT import BuildModel
 from DINOLoss import DINOLoss
 from DATA.Dataset import Imagenette
+from Engine.Train import Train
+from Engine.Validate import Validate
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD  = [0.229, 0.224, 0.225]
@@ -26,9 +28,18 @@ def main():
 
     Device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    transform = DINOAugementation(GlobalScale=(0.4, 1.0), LocalScale=(0.05, 0.4), NoLocalCrops=6)
-    Data = Imagenette(RootDir="D:\\DLCV\\Representation Learning\\PROJECT\\DINO", transform=transform)
-    Train = DataLoader(dataset=Data, batch_size=2, shuffle=True)
+    TrainAugmentation = DINOAugementation(GlobalScale=(0.4, 1.0), LocalScale=(0.05, 0.4), NoLocalCrops=6)
+    ValidationAugmentation = transforms.Compose([
+            transforms.Resize(Config["ImageSize"]),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
+        ])
+    
+    TrainData = Imagenette(RootDir=Config["RootDir"], transform=TrainAugmentation)
+    TrainSet = DataLoader(dataset=TrainData, batch_size=Config["BatchSize"], shuffle=True)
+
+    ValidationData = Imagenette(RootDir=Config["RootDir"], SetType="val", transform=ValidationAugmentation)
+    ValidationSet = DataLoader(dataset=ValidationData, batch_size=Config["BatchSize"], shuffle=False)
 
     Loss = DINOLoss(NCrops = 8, OutputDim = Config["OutputDim"])
     Loss.to(Device)
@@ -57,26 +68,10 @@ def main():
     for epoch in range(Config["Epochs"]):
         if epoch == 1:
             Student.DINOHead.LastLayer.weight_g.requires_grad = True
-        for images, _ in Train:
+        TrainLoss = Train(Student, Teacher, Loss, Optimizer, Device, TrainSet, Config)
+        ValidationLoss = Validate(Student= Student, Teacher= Teacher, ValidationSet= ValidationSet, Loss= Loss)
 
-            images = [image.to(Device) for image in images]
-
-            Studentfeatures = Student(images)
-            Teacherfeatures = Teacher(images[:2])
-
-            Studentfeatures = torch.concat(Studentfeatures, dim=0)
-            Teacherfeatures = torch.concat(Teacherfeatures, dim=0)
-
-            TotalLoss = Loss(Studentfeatures, Teacherfeatures)
-
-            Optimizer.zero_grad()
-            TotalLoss.backward()
-            Optimizer.step()
-
-            with torch.no_grad():
-                for StudentParam, TeacherParam in zip(Student.parameters(), Teacher.parameters()):
-                    TeacherParam.data.mul_(Config["Momentum"])
-                    TeacherParam.data.add_((1 - Config["Momentum"]) * StudentParam.data)
+        print(f"Epoch {epoch} TrainLoss = {TrainLoss:.4f} ValLoss = {ValidationLoss:.4f}")
 
 
 
