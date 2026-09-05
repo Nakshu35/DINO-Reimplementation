@@ -17,11 +17,10 @@ class DINOLoss(nn.Module):
 
         with torch.no_grad():
             batch_center = TeacherOutput.mean(dim=0, keepdim=True)
-
             self.center.mul_(self.CenterMomentum)
             self.center.add_(batch_center * (1 - self.CenterMomentum))
 
-        TeacherOutput = torch.softmax((TeacherOutput - self.CenterMomentum) / self.TeacherTemp, dim=-1)
+        TeacherOutput = torch.softmax((TeacherOutput - self.center) / self.TeacherTemp, dim=-1)
         TeacherOutput = TeacherOutput.detach().chunk(2)
 
         TotalLoss = 0.0

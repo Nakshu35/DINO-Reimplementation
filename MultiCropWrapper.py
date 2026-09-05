@@ -15,7 +15,7 @@ class MultiCropWrapper(nn.Module):
 
     def forward(self, image):
         Sizes = [i.shape[-2:] for i in image]
-        UniqueSizes = set(Sizes)
+        UniqueSizes = sorted(set(Sizes), key= lambda s: Sizes.index(s))
 
         output = []
         for size in UniqueSizes:
