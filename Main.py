@@ -70,7 +70,7 @@ def main():
             TrainLoss, CurrentLr = Train(Student, Teacher, Loss, Optimizer, Device, TrainSet, Config)
             print(f"Epoch {epoch+1} TrainLoss = {TrainLoss:.4f}")
 
-            Writer.writerow([epoch+1, TrainLoss, CurrentLr])
+            Writer.writerow([epoch+1, f"{TrainLoss:.4f}", CurrentLr])
 
             if TrainLoss > BestLoss:
                 BestLoss = TrainLoss
