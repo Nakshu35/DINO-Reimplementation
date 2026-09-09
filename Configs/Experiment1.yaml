@@ -1,5 +1,6 @@
 ExperimentName: "Exp1"
-RootDir: "D:\\DLCV\\Representation Learning\\PROJECT\\DINO"
+RootDir: "/kaggle/working/DINO-Reimplementation"
+DatasetDir: "/kaggle/input/datasets/nakshatragandhe/imagenette"
 BatchSize: 32
 ImageSize : 224
 PatchSize : 8
