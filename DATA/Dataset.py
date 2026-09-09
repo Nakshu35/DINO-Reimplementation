@@ -40,7 +40,7 @@ class Imagenette(Dataset):
 
         self.transform = transform
 
-        SetTypeDir = os.path.join(DatasetDir, f'DATA FILES\\{SetType}')
+        SetTypeDir = os.path.join(DatasetDir,"DATA FILES",SetType)
         ImagesDir = []
         for f in os.listdir(SetTypeDir):
             for i in os.listdir(os.path.join(SetTypeDir, f)):
