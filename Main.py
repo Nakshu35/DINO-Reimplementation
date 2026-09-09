@@ -37,7 +37,7 @@ def main():
 
     TrainAugmentation = DINOAugementation(GlobalScale=(0.4, 1.0), LocalScale=(0.05, 0.4), NoLocalCrops=6)
     TrainData = Imagenette(DatasetDir=Config["DatasetDir"], transform=TrainAugmentation)
-    TrainSet = DataLoader(dataset=TrainData, batch_size=Config["BatchSize"], shuffle=True)
+    TrainSet = DataLoader(dataset=TrainData, batch_size=Config["BatchSize"], shuffle=True, num_workers=4, pin_memory=True, persistent_workers=True)
 
     Loss = DINOLoss(NCrops = 8, OutputDim = Config["OutputDim"])
     Loss.to(Device)
