@@ -83,7 +83,7 @@ def main():
     ValSet   = Imagenette(RootDir=Config["DatasetDir"], SetType="val",   transform=transform)
 
     TrainLoader = DataLoader(dataset=TrainSet, batch_size=Config["BatchSize"], shuffle=False)
-    ValLoader   = DataLoader(dataset=ValSet,   batch_size=Config["BatchSize"], shuffle=False)
+    ValLoader   = DataLoader(dataset=ValSet, batch_size=Config["BatchSize"], shuffle=False)
 
     TrainFeats, TrainLabels = ExtractEmbeddings(Backbone, TrainLoader, Device)
     ValFeats, ValLabels = ExtractEmbeddings(Backbone, ValLoader, Device)
