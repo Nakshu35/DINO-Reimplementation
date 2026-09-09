@@ -79,8 +79,8 @@ def main():
     Backbone.to(Device)
     Backbone.eval()
 
-    TrainSet = Imagenette(RootDir=Config["RootDir"], SetType="train", transform=transform)
-    ValSet   = Imagenette(RootDir=Config["RootDir"], SetType="val",   transform=transform)
+    TrainSet = Imagenette(RootDir=Config["DatasetDir"], SetType="train", transform=transform)
+    ValSet   = Imagenette(RootDir=Config["DatasetDir"], SetType="val",   transform=transform)
 
     TrainLoader = DataLoader(dataset=TrainSet, batch_size=Config["BatchSize"], shuffle=False)
     ValLoader   = DataLoader(dataset=ValSet,   batch_size=Config["BatchSize"], shuffle=False)
