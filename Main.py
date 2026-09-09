@@ -36,7 +36,7 @@ def main():
         csv.writer(f).writerow(["Epoch", "Train Loss", "Lr"])
 
     TrainAugmentation = DINOAugementation(GlobalScale=(0.4, 1.0), LocalScale=(0.05, 0.4), NoLocalCrops=6)
-    TrainData = Imagenette(RootDir=Config["RootDir"], transform=TrainAugmentation)
+    TrainData = Imagenette(RootDir=Config["DatasetDir"], transform=TrainAugmentation)
     TrainSet = DataLoader(dataset=TrainData, batch_size=Config["BatchSize"], shuffle=True)
 
     Loss = DINOLoss(NCrops = 8, OutputDim = Config["OutputDim"])
