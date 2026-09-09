@@ -1,0 +1,15 @@
+ExperimentName: "Exp1"
+RootDir: "D:\\DLCV\\Representation Learning\\PROJECT\\DINO"
+BatchSize: 32
+ImageSize : 224
+PatchSize : 8
+EmbeddingsDim : 256
+NumHeads : 8
+NumLayers : 12
+PositionalEncoding : Learnable
+Pooling : CLS
+DINOHiddenLayers: 2048
+BottleNeckDim: 256
+Momentum: 0.996
+OutputDim: 65536
+Epochs: 100
