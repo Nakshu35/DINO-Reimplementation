@@ -35,12 +35,12 @@ SupervisedTransform = transforms.Compose([
 ])
 
 class Imagenette(Dataset):
-    def __init__(self, RootDir=None, SetType='train', transform = SupervisedTransform):
+    def __init__(self, DatasetDir=None, SetType='train', transform = SupervisedTransform):
         super().__init__()
 
         self.transform = transform
 
-        SetTypeDir = os.path.join(RootDir, f'DATA\\DATA FILES\\{SetType}')
+        SetTypeDir = os.path.join(DatasetDir, f'DATA FILES\\{SetType}')
         ImagesDir = []
         for f in os.listdir(SetTypeDir):
             for i in os.listdir(os.path.join(SetTypeDir, f)):
